@@ -1,0 +1,72 @@
+package com.senai.sistema_almoxarifado_limpeza.service;
+
+import com.senai.sistema_almoxarifado_limpeza.dto.produto.ProdutoAtualizarDto;
+import com.senai.sistema_almoxarifado_limpeza.dto.produto.ProdutoDto;
+import com.senai.sistema_almoxarifado_limpeza.dto.produto.ProdutoRespostaDto;
+import com.senai.sistema_almoxarifado_limpeza.entity.ProdutoEntity;
+import com.senai.sistema_almoxarifado_limpeza.exceptions.ProdutoCadastradoException;
+import com.senai.sistema_almoxarifado_limpeza.exceptions.ProdutoComMovimentacaoException;
+import com.senai.sistema_almoxarifado_limpeza.exceptions.ProdutoNaoEncontradoException;
+import com.senai.sistema_almoxarifado_limpeza.repository.MovimentacaoEstoqueRepository;
+import com.senai.sistema_almoxarifado_limpeza.repository.ProdutoRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class ProdutoService {
+
+    private final ProdutoRepository repository;
+    private final MovimentacaoEstoqueRepository movimentacaoRepository;
+
+    public List<ProdutoRespostaDto> listarProdutos(){
+        return repository.findAll()
+                .stream()
+                .map(ProdutoRespostaDto::toProdutoRespostaDto)
+                .toList();
+    }
+
+    public List<ProdutoRespostaDto> buscarPersonalizada(String termo){
+        List<ProdutoEntity> produtos = repository.
+                findByCodigoContainingIgnoreCaseOrNomeContainingIgnoreCase(termo, termo);
+
+        return produtos.stream()
+                .map(ProdutoRespostaDto::toProdutoRespostaDto)
+                .toList();
+    }
+
+    public void cadastrarProduto(ProdutoDto produtoDto){
+        if (repository.existsByCodigo(produtoDto.codigo())){
+            throw new ProdutoCadastradoException("Produto já cadastrado");
+        }
+
+        repository.save(produtoDto.toProduto());
+    }
+
+    public ProdutoEntity buscarProdutoPorId(Long id){
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new ProdutoNaoEncontradoException("Produto não encontrado"));
+    }
+
+    public void atualizarProduto(Long id, ProdutoAtualizarDto produtoAtualizarDto){
+        ProdutoEntity produto = buscarProdutoPorId(id);
+
+        produto.setNome(produtoAtualizarDto.nome());
+        produto.setCaracteristicas(produtoAtualizarDto.caracteristicas());
+        produto.setEstoqueMinimo(produtoAtualizarDto.estoqueMinimo());
+
+        repository.save(produto);
+    }
+
+    public void excluirProduto(Long id){
+        buscarProdutoPorId(id);
+
+        if (movimentacaoRepository.existsByProdutoId(id)) {
+            throw new ProdutoComMovimentacaoException("Não é possível excluir o produto pois ele possui movimentações registradas");
+        }
+        repository.deleteById(id);
+    }
+}

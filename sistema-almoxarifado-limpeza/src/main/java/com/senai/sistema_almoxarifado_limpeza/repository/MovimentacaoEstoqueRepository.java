@@ -1,0 +1,13 @@
+package com.senai.sistema_almoxarifado_limpeza.repository;
+
+import com.senai.sistema_almoxarifado_limpeza.entity.MovimentacaoEstoqueEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface MovimentacaoEstoqueRepository extends JpaRepository<MovimentacaoEstoqueEntity,Long> {
+
+    List<MovimentacaoEstoqueEntity> findAllByOrderByDataMovimentacaoDesc();
+
+    boolean existsByProdutoId(Long produtoId);
+}

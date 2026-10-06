@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Painel - FerraSul Sistemas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <header class="dashboard-header">
+        <div class="brand">
+            <a th:href="@{/home}" class="brand-link">
+                <div class="logo-hexagon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 0L31.5 8V24L16 32L0.5 24V8L16 0Z" fill="#f59e0b"/>
+                        <path d="M16 8L22 11V21L16 24L10 21V11L16 8Z" fill="white"/>
+                    </svg>
+                </div>
+                <span class="brand-name">FerraSul</span>
+            </a>
+        </div>
+
+        <nav class="main-nav">
+            <a th:href="@{/home}" class="nav-link active">Início</a>
+            <a th:href="@{/produtolista}" class="nav-link">Produtos</a>
+            <a th:href="@{/movimentacoes}" class="nav-link">Estoque</a>
+        </nav>
+
+        <div class="user-area">
+            <div class="user-dropdown">
+                <button class="user-toggle" id="userToggle">
+          <span class="user-avatar"
+                th:text="${usuarioLogado != null ? #strings.toUpperCase(#strings.substring(usuarioLogado, 0, 1)) : 'A'}">A</span>
+                    <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="dropdown-menu" id="userDropdown">
+                    <div class="dropdown-header" style="display: flex; flex-direction: column;">
+                        <span class="user-name" th:text="${usuarioLogado != null ? usuarioLogado : 'Usuário'}">Usuário</span>
+                        <span th:if="${isAdmin}" style="font-size: 12px; color: #a0aec0;">(Admin)</span>
+                        <span th:unless="${isAdmin}" style="font-size: 12px; color: #a0aec0;">(Operador)</span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+
+                    <form th:action="@{/logout}" method="post" class="logout-form" style="margin: 0; padding: 0;">
+                        <button type="submit" class="dropdown-item" style="background-color: transparent; border: none; color: #e2e8f0; width: 100%; text-align: left; display: flex; align-items: center; gap: 8px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Sair
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-content">
+        <p class="content-eyebrow">PAINEL PRINCIPAL</p>
+        <h1 class="content-title">O que você precisa fazer?</h1>
+
+        <div class="action-grid">
+            <a th:href="@{/produtocadastrar}" class="action-card">
+                <div class="action-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 16V8C20.9996 7.64928 20.9071 7.30481 20.7315 7.00116C20.556 6.69751 20.3037 6.44536 20 6.27L13 2.27C12.696 2.09446 12.3511 2.00205 12 2.00205C11.6489 2.00205 11.304 2.09446 11 2.27L4 6.27C3.69626 6.44536 3.44398 6.69751 3.26846 7.00116C3.09294 7.30481 3.00036 7.64928 3 8V16C3.00036 16.3507 3.09294 16.6952 3.26846 16.9988C3.44398 17.3025 3.69626 17.5546 4 17.73L11 21.73C11.304 21.9055 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9055 13 21.73L20 17.73C20.3037 17.5546 20.556 17.3025 20.7315 16.9988C20.9071 16.6952 20.9996 16.3507 21 16Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 12V22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 12L3.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 12L20.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="action-title">Cadastro de produto</h3>
+                <p class="action-desc">Adicionar novo item ao catálogo</p>
+            </a>
+
+            <a th:href="@{/movimentacoes}" class="action-card">
+                <div class="action-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 4H2V20H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 4H16V20H22V4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 8H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 12H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 16H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="action-title">Gestão de estoque</h3>
+                <p class="action-desc">Ver e movimentar itens</p>
+            </a>
+        </div>
+    </main>
+
+</div>
+
+<script>
+    lucide.createIcons();
+
+    const userToggle = document.getElementById('userToggle');
+    const userDropdown = document.getElementById('userDropdown');
+
+    if (userToggle && userDropdown) {
+        userToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', function() {
+            userDropdown.style.display = 'none';
+        });
+
+        userDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+</script>
+</body>
+</html>
