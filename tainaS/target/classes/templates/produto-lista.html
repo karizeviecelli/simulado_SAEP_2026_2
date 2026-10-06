@@ -1,0 +1,392 @@
+<!doctype html>
+
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>Produtos - Gestão de Estoque</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-lg bg-primary navbar-dark shadow">
+
+    <div class="container">
+
+        <a class="navbar-brand"
+           th:href="@{/home}">
+
+            📦 Gestão de Estoque
+
+        </a>
+
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menuPrincipal">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <div class="collapse navbar-collapse"
+             id="menuPrincipal">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       th:href="@{/produtos}">
+
+                        Produtos
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       th:href="@{/categorias}">
+
+                        Categorias
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       th:href="@{/estoque}">
+
+                        Estoque
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       th:href="@{/historico-movimentacoes}">
+
+                        Histórico
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <span class="nav-link fw-bold">
+
+                        <span th:text="${usuarioLogado.nome}">
+                            Usuário
+                        </span>
+
+                    </span>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <form th:action="@{/logout}"
+                          method="post">
+
+                        <button type="submit"
+                                class="nav-link btn btn-link">
+
+                            Sair
+
+                        </button>
+
+                    </form>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+<main class="container py-5">
+
+
+    <!-- CABEÇALHO -->
+
+    <div class="d-flex justify-content-between
+                align-items-center mb-4">
+
+        <div>
+
+            <h1 class="h3 fw-bold">
+                Produtos
+            </h1>
+
+            <p class="text-muted mb-0">
+                Produtos cadastrados no almoxarifado.
+            </p>
+
+        </div>
+
+        <a class="btn btn-primary"
+           th:href="@{/produtos/novo}">
+
+            + Novo Produto
+
+        </a>
+
+    </div>
+
+
+    <!-- MENSAGEM -->
+
+    <div class="alert alert-success"
+         role="alert"
+         th:if="${mensagem}"
+         th:text="${mensagem}">
+
+        Produto cadastrado com sucesso!
+
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <form th:action="@{/produtos}"
+                  method="get">
+
+                <div class="row g-2 align-items-end">
+
+                    <div class="col-md-10">
+
+                        <label for="nome"
+                               class="form-label fw-semibold">
+
+                            Buscar produto
+
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="nome"
+                               name="nome"
+                               th:value="${nomeBusca}"
+                               placeholder="Digite o nome do produto">
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+
+                            🔍 Buscar
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- TABELA -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Produto</th>
+
+                        <th>Categoria</th>
+
+                        <th>Preço</th>
+
+                        <th>Estoque atual</th>
+
+                        <th>Estoque mínimo</th>
+
+                        <th>Status</th>
+
+                        <th class="text-end">
+                            Ações
+                        </th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    <tr th:each="produto : ${produtos}">
+
+                        <td th:text="${produto.id}">
+                            1
+                        </td>
+
+
+                        <td>
+
+                            <strong th:text="${produto.nome}">
+                                Caneta Azul
+                            </strong>
+
+                            <br>
+
+                            <small class="text-muted"
+                                   th:text="${produto.descricao}">
+
+                                Descrição
+
+                            </small>
+
+                        </td>
+
+
+                        <td th:text="${produto.nomeCategoria}">
+                            Material de Escritório
+                        </td>
+
+
+                        <td>
+
+                            R$
+
+                            <span th:text="${#numbers.formatDecimal(produto.preco, 1, 2)}">
+                                5,00
+                            </span>
+
+                        </td>
+
+
+                        <td th:text="${produto.estoqueAtual}">
+                            10
+                        </td>
+
+
+                        <td th:text="${produto.estoqueMinimo}">
+                            5
+                        </td>
+
+
+                        <!-- STATUS DO ESTOQUE -->
+
+                        <td>
+
+                            <span class="badge bg-success"
+                                  th:if="${produto.estoqueAtual > produto.estoqueMinimo}">
+
+                                Normal
+
+                            </span>
+
+                            <span class="badge bg-warning text-dark"
+                                  th:if="${produto.estoqueAtual == produto.estoqueMinimo}">
+
+                                No mínimo
+
+                            </span>
+
+                            <span class="badge bg-danger"
+                                  th:if="${produto.estoqueAtual < produto.estoqueMinimo}">
+
+                                Estoque baixo
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- AÇÕES -->
+
+                        <td class="text-end">
+
+                            <form th:action="@{/produtos/excluir/{id}(id=${produto.id})}"
+                                  method="post"
+                                  class="d-inline">
+
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-danger">
+
+                                    Excluir
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- SEM PRODUTOS -->
+
+                    <tr th:if="${#lists.isEmpty(produtos)}">
+
+                        <td colspan="8"
+                            class="text-center text-muted py-5">
+
+                            Nenhum produto cadastrado.
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+
+</html>
