@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>Principal - Gestão de Estoque</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand {
+            letter-spacing: -0.3px;
+        }
+
+        .card {
+            border-radius: 12px;
+            transition: transform 0.2s ease,
+                        box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.10) !important;
+        }
+
+        .card-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-section {
+            margin-bottom: 35px;
+        }
+
+        .welcome-section h1 {
+            font-weight: 700;
+        }
+
+        .module-title {
+            font-weight: 600;
+        }
+
+        .btn {
+            border-radius: 8px;
+        }
+
+        footer {
+            margin-top: 80px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-lg bg-primary navbar-dark shadow">
+
+    <div class="container">
+
+        <a class="navbar-brand"
+           th:href="@{/home}">
+
+            📦 Gestão de Estoque
+
+        </a>
+
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menuPrincipal">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <div class="collapse navbar-collapse"
+             id="menuPrincipal">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       th:href="@{/produtos}">
+
+                        Produtos
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       th:href="@{/categorias}">
+
+                        Categorias
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       th:href="@{/estoque}">
+
+                        Estoque
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       th:href="@{/historico-movimentacoes}">
+
+                        Histórico
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <span class="nav-link fw-bold">
+
+                        <span th:text="${usuarioLogado.nome}">
+                            Usuário
+                        </span>
+
+                    </span>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <form th:action="@{/logout}"
+                          method="post">
+
+                        <button type="submit"
+                                class="nav-link btn btn-link">
+
+                            Sair
+
+                        </button>
+
+                    </form>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- ========================= -->
+<!-- CONTEÚDO -->
+<!-- ========================= -->
+
+<main class="container py-5">
+
+
+    <!-- BOAS-VINDAS -->
+
+    <section class="welcome-section">
+
+        <h1 class="display-6">
+
+            Bem-vindo,
+
+            <span th:text="${usuarioLogado.nome}">
+                Usuário
+            </span>!
+
+        </h1>
+
+
+        <p class="lead text-muted">
+
+            Gerencie os produtos, categorias e estoque
+            do almoxarifado.
+
+        </p>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- MÓDULOS -->
+    <!-- ========================= -->
+
+    <div class="row g-4">
+
+
+        <!-- ========================= -->
+        <!-- PRODUTOS -->
+        <!-- ========================= -->
+
+        <div class="col-md-4">
+
+            <div class="card h-100 shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+
+                    <div class="card-icon">
+                        📦
+                    </div>
+
+
+                    <h3 class="card-title module-title">
+
+                        Produtos
+
+                    </h3>
+
+
+                    <p class="card-text text-muted">
+
+                        Cadastre novos produtos,
+                        consulte os produtos cadastrados
+                        e organize os itens do almoxarifado.
+
+                    </p>
+
+
+                    <a class="btn btn-primary"
+                       th:href="@{/produtos}">
+
+                        Acessar Produtos
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- CATEGORIAS -->
+        <!-- ========================= -->
+
+        <div class="col-md-4">
+
+            <div class="card h-100 shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+
+                    <div class="card-icon">
+                        🗂️
+                    </div>
+
+
+                    <h3 class="card-title module-title">
+
+                        Categorias
+
+                    </h3>
+
+
+                    <p class="card-text text-muted">
+
+                        Cadastre e gerencie as categorias
+                        utilizadas para organizar os
+                        produtos do almoxarifado.
+
+                    </p>
+
+
+                    <a class="btn btn-primary"
+                       th:href="@{/categorias}">
+
+                        Acessar Categorias
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- ESTOQUE -->
+        <!-- ========================= -->
+
+        <div class="col-md-4">
+
+            <div class="card h-100 shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+
+                    <div class="card-icon">
+                        📊
+                    </div>
+
+
+                    <h3 class="card-title module-title">
+
+                        Gestão de Estoque
+
+                    </h3>
+
+
+                    <p class="card-text text-muted">
+
+                        Visualize as quantidades disponíveis,
+                        registre entradas e saídas e
+                        acompanhe o estoque mínimo.
+
+                    </p>
+
+
+                    <a class="btn btn-primary"
+                       th:href="@{/estoque}">
+
+                        Acessar Estoque
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- ALERTA ESTOQUE MÍNIMO -->
+        <!-- ========================= -->
+
+        <div class="col-12">
+
+            <div class="card shadow-sm border-warning">
+
+                <div class="card-body p-4">
+
+
+                    <div class="d-flex align-items-start">
+
+
+                        <div class="me-3 fs-3">
+                            ⚠️
+                        </div>
+
+
+                        <div>
+
+                            <h4 class="card-title text-warning">
+
+                                Alerta de Estoque Mínimo
+
+                            </h4>
+
+
+                            <p class="card-text mb-3">
+
+                                O sistema permite identificar
+                                produtos que estão abaixo do
+                                estoque mínimo configurado.
+
+                            </p>
+
+
+                            <a class="btn btn-warning"
+                               th:href="@{/estoque}">
+
+                                Ver Estoque
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>
